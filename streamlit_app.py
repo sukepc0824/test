@@ -8,11 +8,12 @@ st.set_page_config(page_title="タイトル", layout="wide")
 st.title('Streamlitのサンプルアプリ')
 code = """
 <style>
-    p {
+    p.hello {
         color: red;
+        font-size: 30rem;
     }
 </style>
-<p>こんにちは</p>
+<p class="hello">こんにちは</p>
 """
 st.html(code)
 
