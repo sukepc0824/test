@@ -10,10 +10,11 @@ code = """
 <style>
     p.hello {
         color: red;
-        font-size: 30rem;
+        font-size: 3rem;
     }
 </style>
 <p class="hello">こんにちは</p>
+<button onclick="console.log(hello!)">こんにちは</button>
 """
 st.html(code)
 
