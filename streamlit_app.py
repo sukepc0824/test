@@ -6,6 +6,15 @@ st.set_page_config(page_title="タイトル", layout="wide")
 
 # タイトルを設定
 st.title('Streamlitのサンプルアプリ')
+code = """
+<style>
+    p {
+        color: red;
+    }
+</style>
+<p>こんにちは</p>
+"""
+st.html(code)
 
 # テキスト入力ボックスを作成し、ユーザーからの入力を受け取る
 user_input = st.text_input('あなたの名前を入力してください')
@@ -25,6 +34,11 @@ st.caption("十字キー（左右）でも調整できます。")
 
 # 選択した数字を表示
 st.write(f'あなたが選んだ数字は「{number}」です。')
+
+agree = st.checkbox('こんにちは！')
+
+if agree:
+    st.write('Great!')
 
 # 選択した数値を2進数に変換
 binary_representation = bin(number)[2:]  # 'bin'関数で2進数に変換し、先頭の'0b'を取り除く
