@@ -14,7 +14,12 @@ code = """
     }
 </style>
 <p class="hello">こんにちは</p>
-<button onclick="console.log(hello!)">こんにちは</button>
+<button onclick="hello()">こんにちは</button>
+<script>
+function hello(){
+    console.log(hello!!)
+}
+</script>
 """
 st.html(code)
 
