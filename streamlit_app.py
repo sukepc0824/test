@@ -1,28 +1,40 @@
 import streamlit as st
-add_selectbox = st.sidebar.selectbox(
-    "何をプレイする？",
-    ("因数分解", "公式クイズ", )
-)
+import random
 
-st.title("因数分解")
-st.text("好きな数字を選んでください")
+difficulty = 3
+prime_lists = [2,3,5,7]
 
-number = st.slider("スライダー",min_value=0, max_value=100)
+@st.experimental_dialog("Game Over!")
+def gameover():
+    if st.button("リプレイ"):
+        st.rerun()
 
-st.button("ここをタップ")
-if st.button("ここをタップ"):
-    st.write(number + number % 6 + number / 3)
-else:
-    st.write("数字を選んでください")
-""" 
-https://docs.streamlit.io/develop/api-reference
-↑困ったらこれを見よう！！
+def generate_product(multiply_number):
+    return random.randint(1,difficulty)*multiply_number
 
-//アイデア
-全部作ろう！！！！
-・因数分解（割と簡単）
-    ランダムな数a,b,c,dを生成
-    2*a+3*b+5*c+7*d=素数ではない数を生成
+def devide(n):
+    if st.session_state.number % n != 0:
+        gameover()
+    else:
+        st.session_state.number /= n
+
+if 'number' not in st.session_state:
+    st.session_state.number = 1
+
+    for prime in prime_lists:
+        st.session_state.number *= generate_product(prime)
     
-・公式クイズ（割と複雑）←おみくじ
-"""
+
+if st.button("2"):
+    devide(2)
+
+if st.button("3"):
+    devide(3)
+
+if st.button("5"):
+    devide(5)
+
+if st.button("7"):
+    devide(7)
+
+st.title(round(st.session_state.number))
