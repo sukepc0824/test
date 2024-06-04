@@ -164,7 +164,7 @@ my_html = """
     </div>
 
     <script>
-        let primes = [2, 3, 5, 7, 11, 13,17,19,23]
+        let primes = [2, 3, 5, 7, 11, 13 ,17,19,23]
         let prime_list = [2, 3, 5, 7]
         let prime_number = 1
         let difficulty = 3
@@ -223,7 +223,7 @@ my_html = """
                 document.querySelector("h1").innerText = prime_number
 
                 if (prime_number === 1) {
-                    difficulty += 0.5
+                    difficulty += 0.25
                     if (Number.isInteger(difficulty)) {
                         document.querySelector("h1").innerText = "!"
                         if (primes[difficulty] != undefined) {
@@ -251,54 +251,5 @@ my_html = """
 """
 
 html(my_html ,height=520)
-
-difficulty = 2
-prime_lists = [2,3,5,7,11,13,17]
-
-@st.experimental_dialog("Game Over!")
-def gameover():
-    if st.button("リプレイ"):
-        st.rerun()
-
-def generate_product(multiply_number):
-    return random.randint(1,difficulty)*multiply_number
-
-def devide(n):
-    if st.session_state.number % n != 0:
-        gameover()
-    else:
-        st.session_state.number /= n
-        if st.session_state.number == 1:
-            st.session_state.number = 1
-            st.rerun()
-
-if 'number' not in st.session_state:
-    st.session_state.number = 1
-
-    for prime in prime_lists:
-        st.session_state.number *= generate_product(prime)
-
-
-if st.button("2"):
-    devide(2)
-
-if st.button("3"):
-    devide(3)
-
-if st.button("5"):
-    devide(5)
-
-if st.button("7"):
-    devide(7)
-
-if st.button("11"):
-    devide(11)
-
-if st.button("13"):
-    devide(13)
-
-if st.button("17"):
-    devide(17)
-
 
 st.title(round(st.session_state.number))
