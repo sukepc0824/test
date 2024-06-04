@@ -164,7 +164,7 @@ my_html = """
     </div>
 
     <script>
-        let primes = [2, 3, 5, 7, 11, 13]
+        let primes = [2, 3, 5, 7, 11, 13,17,19,23]
         let prime_list = [2, 3, 5, 7]
         let prime_number = 1
         let difficulty = 3
@@ -223,7 +223,7 @@ my_html = """
                 document.querySelector("h1").innerText = prime_number
 
                 if (prime_number === 1) {
-                    difficulty += 0.25
+                    difficulty += 0.5
                     if (Number.isInteger(difficulty)) {
                         document.querySelector("h1").innerText = "!"
                         if (primes[difficulty] != undefined) {
