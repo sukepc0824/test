@@ -1,11 +1,6 @@
 import streamlit as st
-import random
-import asyncio
-import streamlit as st
 from streamlit.components.v1 import html
-import time
-
-st.set_page_config(layout="wide")
+st.set_page_config(page_title="Factorization-Game",layout="wide")
 
 my_html = """
 <!DOCTYPE html>
@@ -20,11 +15,22 @@ my_html = """
 
         body {
             width: 100%;
-            height: 500px;
+            height: 100%;
             margin: auto;
             position: relative;
             background: #f3f3f3;
             font-family: "DM Mono", sans-serif;
+            color: #222;
+        }
+
+        main {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            max-height: 500px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
         dialog {
@@ -66,20 +72,48 @@ my_html = """
             border-radius: 5px;
         }
 
-        header .status {
+        header {
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            height: 64px;
+            height: 36px;
+            top: 15px;
             align-items: center;
             justify-content: center;
-            gap: 20px;
+            gap: 0px;
+            width: 100%;
+            max-width: 540px;
+        }
+
+        header .status {
+            width: 50%;
+            padding: 0 20px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 4px;
+            border-radius: 400px;
         }
 
         header progress {
-            width: 300px;
-            accent-color: #000000;
+            width: 100%;
+            accent-color: #222;
+        }
+
+        header .status-score {
+            width: 56px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 33px;
+            font-weight: 500;
+            border-radius: 400px;
+            color: #ef7000;
         }
 
         header .time {
@@ -100,12 +134,12 @@ my_html = """
             font-weight: 500;
             font-size: 80px;
             margin: 0;
-            animation: animationZoom 30s linear forwards;
+            animation: animationZoom 26s linear forwards;
         }
 
         @keyframes animationZoom {
             100% {
-                transform: scale(1.8);
+                transform: scale(2);
             }
         }
 
@@ -126,10 +160,11 @@ my_html = """
             background-color: white;
             border: #ddd solid 1px;
             width: 78px;
-            padding: 20px;
-            font-size: 32px;
+            padding: 13px;
+            font-size: 34px;
             font-family: "DM Mono", sans-serif;
             border-radius: 10px;
+            color: #222;
         }
 
         button {
@@ -139,6 +174,43 @@ my_html = """
         button:hover {
             filter: brightness(94%);
         }
+
+        button:active {
+            filter: brightness(90%);
+        }
+
+        @media (max-width: 600px) {
+            main {
+                max-height: calc(100%);
+            }
+
+            h1 {
+                font-size: 54px;
+            }
+
+            button:hover {
+                filter: brightness(100%);
+            }
+
+            button:active {
+                filter: brightness(90%);
+            }
+
+            .output {
+                top: 45%;
+            }
+
+            .container {
+                width: calc(100% - 30px);
+                gap: 2px;
+                bottom: 50px;
+            }
+
+            .container button {
+                width: 49%;
+                padding: 8px;
+            }
+        }
     </style>
 </head>
 
@@ -146,25 +218,33 @@ my_html = """
     <dialog>
         <div class="score-wrap">
             <p>score:</p>
-            <p class="score">40</p>
+            <p class="score">0</p>
         </div>
         <form method="dialog">
             <button onclick="location.reload()">Play Again</button>
         </form>
     </dialog>
-    <header>
-        <div class="status">
-            <progress value="0" max="30"></progress>
+    <main>
+        <header>
+            <div class="status">
+                <p></p>
+                <progress value="0" max="30"></progress>
+            </div>
+            <div class="status-score">
+                0
+            </div>
+        </header>
+        <div class="output">
+            <h1></h1>
         </div>
-    </header>
-    <div class="output">
-        <h1></h1>
-    </div>
-    <div class="container">
-    </div>
+        <div class="container">
+        </div>
+    </main>
+
 
     <script>
-        let primes = [2, 3, 5, 7, 11, 13 ,17,19,23]
+        let primes = [2, 3, 5, 7, 11, 13]
+        let keybind = ["s", "d", "f", "j", "k", "l"]
         let prime_list = [2, 3, 5, 7]
         let prime_number = 1
         let difficulty = 3
@@ -212,6 +292,7 @@ my_html = """
                 let element_button = document.createElement("button")
                 element_button.innerText = value
                 element_button.setAttribute("onclick", `devide(${value})`)
+                element_button.value = value
                 document.querySelector(".container").append(element_button)
             })
         }
@@ -220,6 +301,8 @@ my_html = """
             if (prime_number % number == 0) {
                 prime_number /= number
                 score += number
+                document.querySelector(".status-score").innerText = score
+
                 document.querySelector("h1").innerText = prime_number
 
                 if (prime_number === 1) {
@@ -242,6 +325,15 @@ my_html = """
                 gameover()
             }
         }
+        document.addEventListener('keyup', keyup_event)
+        document.addEventListener('keydown', keydown_event)
+        function keyup_event(e) {
+            document.querySelector("[value='" + primes[keybind.indexOf(e.key)] + "']").style.filter = "brightness(100%)"
+        }
+        function keydown_event(e) {
+            devide(primes[keybind.indexOf(e.key)])
+            document.querySelector("[value='" + primes[keybind.indexOf(e.key)] + "']").style.filter = "brightness(90%)"
+        }
         create_buttons()
         generate_product()
     </script>
@@ -251,5 +343,18 @@ my_html = """
 """
 
 html(my_html ,height=520)
-
-st.title(round(st.session_state.number))
+st.markdown("""
+        <style>
+         iframe {
+            position:fixed !important;
+            top: 0% !important;
+            left: 0 !important;
+            width: 100% !important;
+            height:100% !important;
+            z-index: 100000000;
+         }
+         button[data-testid="manage-app-button"],button.styles_terminalButton__JBj5T{
+            display: none !important;
+         }
+        </style>
+        """, unsafe_allow_html=True)
